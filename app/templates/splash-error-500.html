@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Internal Server Error</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Adam Miller">
+
+  <link rel="icon" type="image/png" href="{{ url_for('static',filename='favicon.ico') }}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/splash-style.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/splash-template.css')}}">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Orbitron:400,700" rel="stylesheet">
+</head>
+
+<body id="myPage" data-spy="scroll" data-offset="60">
+
+<div class="jumbotron">
+  <div id="header">
+    <div id="sunburst">
+      <img src="{{url_for('static', filename='img/sunburst.png')}}">
+    </div>
+    <div id="title">
+      <h1><span class="firstLetter">S</span>undance <span class="firstLetter">T</span>ransport, Inc.</h1>
+    </div>
+  </div>
+</div>
+
+<div id="template" class="main container-fluid">
+  <div class="row">
+    <div class="col-sm-offset-2 col-sm-8">
+      <h2>Uh-oh, that's a server error</h2>
+      <p>Something unexpected has gone wrong. Please contact us at <a href="mailto:sundancetransportinc@gmail.com">sundancetransportinc@gmail.com</a> and let us know about the problem.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

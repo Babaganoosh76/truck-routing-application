@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Internal Server Error</title>
+{% endblock %}
+
+{% block content %}
+<section>
+	<h3>Uh-oh, something went wrong</h3>
+	<p>Something unexpected has happened. Contact your painfully handsome system administrator so he can diagnose the issue :)</p>
+	<p>Error information: {{ error }}</p>
+	<p><a href="{{url_for('dashboard.dashboard_index')}}">Return to the homepage</a></p>
+</section>
+{% endblock %}

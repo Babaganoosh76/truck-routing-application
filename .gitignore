@@ -1,0 +1,10 @@
+__pycache__/
+sundance-venv/
+bin/
+include/
+lib/
+*.py[cod]
+.DS_Store
+*.xlsx
+*.pdf
+.Python

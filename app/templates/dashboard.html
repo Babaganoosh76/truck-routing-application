@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Dashboard</title>
+{% endblock %}
+
+{% block content %}
+<section id="dashboard">
+	<h1>Dashboard</h1>
+
+	<ul class="nav-pane">
+		<li>
+			<a href="{{url_for('.upload')}}">
+				<span>
+					<i class="fas fa-upload"></i>
+				</span>
+				Upload Files
+			</a>
+		<!-- </li> -->
+		<li>
+			<a href="{{url_for('.payroll')}}">
+				<span>
+					<i class="fas fa-dollar-sign"></i>
+				</span>
+				Payroll
+			</a>
+		<!-- </li> -->
+		<li>
+			<a href="{{url_for('.loads')}}">
+				<span>
+					<i class="fas fa-th-list"></i>
+				</span>
+				Loads
+			</a>
+		<!-- </li> -->
+		<li>
+			<a href="{{url_for('.drivers')}}">
+				<span>
+					<i class="fas fa-user"></i>
+				</span>
+				Drivers
+			</a>
+		<!-- </li> -->
+		<li>
+			<a href="{{url_for('.equipment')}}">
+				<span>
+					<i class="fas fa-truck-moving"></i>
+				</span>
+				Equipment
+			</a>
+		<!-- </li> -->
+		<li>
+			<a onclick="alert('This feature isn\'t implemented yet')">
+				<span>
+					<i class="fas fa-address-card"></i>
+				</span>
+				Customers
+			</a>
+		<!-- </li> -->
+		<li>
+			<a href="{{url_for('.price_calculator')}}">
+				<span>
+					<i class="fas fa-calculator"></i>
+				</span>
+				Price Calculator
+			</a>
+		<!-- </li> -->
+		<li>
+			<a href="{{url_for('.price_sheet')}}">
+				<span>
+					<i class="fas fa-table"></i>
+				</span>
+				Price Sheets
+			</a>
+		<!-- </li> -->
+		<li>
+			<a href="{{url_for('.statistics')}}">
+				<span>
+					<i class="fas fa-chart-bar"></i>
+				</span>
+				Statistics
+			</a>
+		<!-- </li> -->
+	</ul>
+
+</section>
+{% endblock %}

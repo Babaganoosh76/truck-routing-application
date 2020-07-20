@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Edit Load</title>
+{% endblock %}
+
+{% block content %}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+	$(function(){$("#datepicker").datepicker()})
+</script>
+<section>
+  <h1>Edit Load</h1>
+  <form class="sundance-form" method="POST">
+    {{ form1.hidden_tag() }}
+    {{ form1.id(value=load._id, type='hidden')}}
+    <label>Driver (alias)</label>
+    {{ form1.driver(value=load.driver) }}
+    <label>Vehicle</label>
+    {{ form1.vehicle(value=load.vehicle) }}
+    <label>Hand Tag</label>
+    {{ form1.hand_tag(value=load.hand_tag) }}
+    <label>Origin</label>
+    {{ form1.origin(value=load.origin) }}
+    <label>Customer</label>
+    {{ form1.customer(value=load.customer) }}
+    <label>P.O. Number</label>
+    {{ form1.po_num(value=load.po_num) }}
+    <label>Destination</label>
+    {{ form1.destination(value=load.destination) }}
+    <label>Date</label>
+    {{ form1.date(id='datepicker',value=load.date.strftime('%m/%d/%Y')) }}
+    <label>Forklift Cost</label>
+    {{ form1.forklift(value=load.forklift) }}
+    <label>Amount Billed</label>
+    {{ form1.amount_billed(value=load.amount_billed) }}
+    {% if load.subhaul %}<label>Amount Paid</label>{% endif %}
+    {{ form1.amount_paid(value=load.amount_paid, type='text' if load.subhaul else 'hidden') }}
+    <label class="checkbox">Subhaul Load</label>
+    {{ form1.subhaul(value=load.subhaul, checked=True if load.subhaul else False) }}
+    <label class="checkbox">Pre-Load</label>
+    {{ form1.preload(value=load.preload, checked=True if load.preload else False) }}
+    <label>Other</label>
+    {% set f = form1.other.process_data(load.other|join('\n')) %}
+    {{ form1.other(class='resize') }}
+    <button type="submit">Save</button>
+  </form>
+</section>
+{% endblock %}

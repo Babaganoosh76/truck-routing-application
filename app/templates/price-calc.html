@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Homepage</title>
+{% endblock %}
+
+{% block content %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDe2svPTpoA8wbJkR32E-dZCgH_ZNPvfdg&libraries=places&callback=init" async defer></script>
+
+<section id="price-calculator">
+	<h1>Price Calculator</h1>
+	<form class="sundance-form">
+		<label>Origin</label>
+		<input id="origin" type="text" name="origin" placeholder="">
+		<label>Destination</label>
+		<input id="destination" type="text" name="destination" placeholder="">
+	</form>
+	<div id="map" style="height: 500px"></div>
+	<h2 id="results-h2">Results</h2>
+	<table id="results"></table>
+</section>
+
+<script type="text/javascript">
+	var directions_service, directions_renderer
+
+	function init() {
+		var map = new google.maps.Map($('#map')[0], {
+			center: {lat: 38.5816, lng: -121.4944},
+			disableDoubleClickZoom: true,
+			fullscreenControl: false,
+			gestureHandling: 'auto',
+			keyboardShortcuts: true,
+			mapTypeControl: false,
+			mapTypeId: 'roadmap',
+			scrollwheel: false,
+			streetViewControl: false,
+			zoom: 7
+		})
+		directions_service = new google.maps.DirectionsService()
+		directions_renderer = new google.maps.DirectionsRenderer()
+		directions_renderer.setMap(map);
+
+		var origin = $('#origin')[0]
+		var destination = $('#destination')[0]
+		var origin_search = new google.maps.places.SearchBox($('#origin')[0])
+		var destination_search = new google.maps.places.SearchBox(destination)
+
+		// Place the input field onto the map
+		// map.controls[google.maps.ControlPosition.TOP_RIGHT].push(origin);
+		origin_search.addListener('places_changed', function() {
+			origin_place = origin_search.getPlaces()[0]
+			if (destination_search.getPlaces()) {
+				calc_route(origin_search.getPlaces()[0].place_id, destination_search.getPlaces()[0].place_id)
+			}
+		})
+
+		destination_search.addListener('places_changed', function() {
+			destination_place = destination_search.getPlaces()[0]
+			if (origin_search.getPlaces()) {
+				calc_route(origin_search.getPlaces()[0].place_id, destination_search.getPlaces()[0].place_id)
+			}
+		})
+	}
+
+	function calc_route(oid, did) {
+		var request = {
+			origin: {
+				'placeId': oid
+			},
+			destination: {
+				'placeId': did
+			},
+      travelMode: 'DRIVING'
+    };
+    directions_service.route(request, function(res, status) {
+    	if (status == 'OK') {
+    		directions_renderer.setDirections(res);
+    		show_results(res.routes[0].legs[0].distance.value)
+    	} else {
+    		console.log('Error retrieving route: ' + status)
+    	}
+    });
+  }
+
+  function show_results(meters, tolls=null) {
+  	var miles = 0.00062137*meters
+  	var rate = 2.50
+  	$r = $('#results')
+  	$r.empty()
+  	$r.append('<tr><td><p>'+miles.toFixed()+' mi</p><p class="small">at '+rate.toFixed(2)+'/mi</p></td><td>'+(miles*rate).toFixed(2)+'</td></tr>')
+  	$r.append('<tr><td><p>'+(tolls?tolls.length:0)+' tolls</p><p class="small">No data</p></td><td>0.00</td></tr>')
+  	$r.append('<tr><td>Suggested cost:</td><td id="total">'+(miles*rate).toFixed(2)+'</td></tr>')
+  	$r.show()
+  	$('#results-h2').show()
+
+  	$('html, body').animate({
+  		scrollTop: $('#results').offset().top
+  	}, 1000)
+  }
+
+  function round_price(p) {
+  	return Math.ceil(p/25)*25
+  }
+</script>
+{% endblock %}

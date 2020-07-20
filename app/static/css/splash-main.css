@@ -1,0 +1,334 @@
+a {
+	font-style: italic;
+}
+.container-fluid {
+	box-shadow: 0 3px 20px #888;
+}
+.bottomLink {
+	margin-top: 15px;
+	text-align: left;
+}
+
+body {
+	background-color: #ddd;
+	max-width: 1500px;
+	margin: auto;
+	position: relative;
+}
+
+/*TITLE*/
+#title {
+	position: relative;
+	background-image: url('../img/header.jpg');
+	background-position: center;
+	background-size: cover;
+	height: 300px;
+	color: #ffffff;
+	padding: 75px 25px;
+}
+
+/*SERVICES*/
+#services span img {
+	height: 150px;
+}
+
+/*TRUCKING*/
+#trucking .glyphicon {
+	color: #e4742e;
+	font-size: 50px;
+}
+#trucking .row {
+	padding: 25px 0px;
+}
+#trucking .col-sm-4 * {
+	position: relative;
+}
+
+/*RENTALS*/
+#rentals p {
+	text-indent: 40px;
+	margin-bottom: 15px;
+}
+
+/*EQUIPMENT*/
+#equipment * {
+	overflow: hidden;
+}
+#equipment h2 {
+	text-align: center;
+}
+#equipment h3 {
+	margin: 10px 0;
+	text-align: center;
+}
+.thumbnail {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items:center;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+.thumbnail img {
+	width: 100%;
+}
+#equipment .item:hover {
+	cursor: pointer;
+}
+#equipment a.link {
+}
+
+/* MODAL */
+.arrow {
+	height: 100%;
+    width: 50px;
+    position: absolute;
+    top: 0;
+    transition: 0.3s ease;
+}
+.arrow:hover {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.arrow .glyphicon {
+	position: absolute;
+	top: 50%;
+	margin-top: -30px;
+	padding: 16px 10px;
+	color: #ffffff;
+	font-size: 20px;
+	transition: 0.3s ease;
+}
+#next {
+	right: 0;
+}
+.numberText {
+	color: #f2f2f2;
+	font-size: 12px;
+	padding: 8px 12px;
+	position: absolute;
+	top: 0;
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.7);
+	transition: all 0.5s ease;
+}
+#prev:hover + .numberText {
+    margin-left: 50px;
+}
+
+/*TEAM*/
+#team {
+	padding-bottom: 20px;
+}
+#team a {
+	cursor: pointer;
+}
+.profpic {
+	position: relative;
+	padding: 0;
+	margin-right: 15px;
+	width: 150px;
+}
+.profpic img {
+	width: 100%;
+	max-width: 150px;
+	max-height: 150px;
+	border-radius: 50%;
+}
+.profileParent {
+	margin: 25px 0px 15px;
+}
+.profile {
+	float: none;
+	position: relative;
+	text-align: left;
+	display: flex;
+	justify-content: center;
+	align-items:center;
+	overflow: hidden;
+	padding: 0px;
+	margin: 0px;
+}
+.profile p {
+	margin: 0;
+}
+.profileParent .bottomLink {
+	text-align: center;
+}
+#linkedin {
+	position: absolute;
+	border-radius: 0;
+	width: 40px;
+	right: 0;
+	bottom: 0;
+}
+#linkedin:hover {
+	opacity: 0.8;
+}
+.bio {
+	text-indent: 40px;
+	text-align: left;
+}
+.reb, .bry {
+	display: none;
+}
+.bio img {
+	display: block;
+	width: 100%;
+}
+.bry img {
+	transform: scaleX(-1);
+}
+
+/*TESTIMONIALS*/
+#testimonials {
+	padding-bottom: 70px;
+}
+
+/*CONTACT*/
+#contact h2{
+	text-align: center;
+}
+#contact {
+	box-shadow: 3px 3px 20px #888888;
+	padding-bottom: 0;
+}
+#contact .glyphicon {
+	color: #000000;
+	font-size: 50px;
+}
+#contactInfo h2{
+	margin-bottom: 30px;
+}
+#contactInfo p {
+	margin-bottom: 25px;
+}
+.panel {
+	background-color: #ffafaf;
+}
+.form-group {
+	padding: 0px;
+}
+
+/*FOOTER*/
+#footer {
+	padding: 10px;
+	margin: 0 -50px;
+}
+#footer p {
+	text-align: center;
+	color: #ffffff;
+	font-size: 10px;
+	margin-bottom: 0px;
+}
+
+/*CAROUSEL*/
+.carousel-control.right, .carousel-control.left {
+	background-image: none;
+	color: #e4742e;
+}
+.carousel-indicators {
+	bottom: -35px;
+	z-index: 5;
+}
+.carousel-indicators li {
+	border-color: #e4742e;
+}
+.carousel-indicators li.active {
+	background-color: #e4742e;
+}
+
+/*RESIZE*/
+@media screen and (max-width: 1061px) {
+	.profpic {
+		margin: auto;
+	}
+	.profile {
+		display: block;
+		text-align: center;
+	}
+}
+
+@media screen and (max-width: 957px) {
+	#services span img {
+		height: 110px;
+	}
+}
+
+/*XS*/
+@media screen and (max-width: 767px) {
+	h1 {
+		font-size: 50px;
+	}
+	.navbar {
+		padding: 0;
+	}
+	.bottomLink {
+		text-align: center;
+	}
+
+	#title {
+		text-align: center;
+		position: relative;
+		top: 100px;
+		height: 250px;
+		padding-top: 50px;
+	}
+	#services {
+		padding-top: 130px;
+	}
+	.row > div {
+		padding: 15px 0px;
+	}
+	#trucking h2 {
+		margin-top: 50px;
+		margin-bottom: 0;
+	}
+	#trucking .row {
+		padding: 0;
+	}
+	#rentals ul {
+		margin-bottom: 0px;
+	}
+	.profileParent {
+		margin: 25px 0px;
+	}
+	.profpic {
+		margin: 0;
+		margin-right: 15px;
+	}
+	.profile {
+		text-align: left;
+		display: flex;
+		justify-content: center;
+		align-items:center;
+		overflow: hidden;
+	}
+	#contactInfo h2 {
+		padding-bottom: 0;
+	}
+}
+
+@media screen and (max-width: 498px) {
+	h1 {
+		font-size: 40px;
+	}
+	#title {
+		padding: 0px 10px;
+	}
+	.modal {
+		padding-top: 200px;
+	}
+	.profpic {
+		margin: auto;
+	}
+	.profile {
+		display: block;
+		text-align: center;
+	}
+}
+@media screen and (max-width: 372px) {
+	.g-recaptcha {
+		margin-left: -35px;
+	}
+}

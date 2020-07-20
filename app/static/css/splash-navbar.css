@@ -1,0 +1,149 @@
+.desktopNavContainer {
+	position: fixed;
+	width: 100%;
+	height: 1px;
+	max-width: 1500px;
+	margin: auto;
+	z-index: 5;
+}
+
+/*DESTOP NAVIGATION PANE*/
+#desktopNav {
+	z-index: 5;
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 22%;
+	margin-left: 3%;
+	padding: 0px;
+}
+.spinner {
+	overflow: hidden;
+}
+.sunburst {
+	z-index: 1;
+	position: relative;
+	max-width: 100%;
+	transform: rotate(0deg);
+	border-radius: 50%;
+}
+#notSubhaul {
+	background-color: #000;
+	position: relative;
+}
+.navbar {
+	margin: 0;
+	background-color: #000;
+	z-index: 9;
+	font-size: 14px;
+	border: 0;
+	letter-spacing: 2px;
+	padding: 10px;
+	min-height: 0px;
+	height: auto;
+	overflow: hidden;
+}
+.navbar li a, .navbar li a:focus {
+	font-style: normal;
+	color: #ffffff;
+	background-color: #000000;
+	text-align: center;
+	margin: 0;
+	font-weight: 700;
+	padding: 10px 0px;
+}
+.navbar li a:hover, .navbar li a:active, .navbar li.active a {
+	color: #000000;
+	background-color: #ffffff;
+}
+.nav li:last-child a {
+	color: #e4742e;
+}
+
+/*SUBHAUL*/
+#subhaul {
+	position: relative;
+	margin-top: 15px;
+	padding: 10px 10px 20px;
+	background-color: #eead40;
+	color: white;
+	text-align: center;
+	width: 80%;
+	margin-left: 10%;
+}
+#subhaul p {
+	margin: 5px 0px 10px;
+}
+.navbarToggle {
+	width: 50px;
+	height: 50px;
+	border: 0;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	background-color: transparent;
+	padding: 0;
+}
+
+#desktopNav .glyphicon {
+	height: 100%;
+	width: 100%;
+	color: #fff;
+	font-size: 24;
+}
+
+#desktopNav .glyphicon::before {
+	/*content: "\e236";*/
+}
+
+
+/*XS*/
+@media screen and (max-width: 767px) {
+	#desktopNav {
+		width: 100%;
+		margin: 0px;
+	}
+	.spinner {
+		height: 50px;
+	}
+	.sunburst {
+		height: 100px;
+	}
+	#subhaul {
+		margin: 0px;
+		width: 100%;
+		height: 50px;
+		padding: 5px;
+		clear: both;
+	}
+	#subhaul p {
+		float: left;
+	}
+	#subhaul a {
+		float: right;
+		margin-top: 2px;
+	}
+	.navbar {
+		height: 0px;
+		padding: 0px;
+	}
+}
+
+@media screen and (max-width: 498px) {
+	#subhaul {
+		width: 100%;
+		margin-left: 0;
+		padding: 3px;
+		margin-top: 2px;
+	}
+}
+
+@media screen and (max-width: 372px) {
+	#subhaul p {
+		margin: 0px;
+		font-size: 15px;
+		white-space: pre-wrap;
+		max-width: 200px;
+		line-height: 1.3;
+	}
+}

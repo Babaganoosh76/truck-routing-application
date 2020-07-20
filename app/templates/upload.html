@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Payroll</title>
+{% endblock %}
+
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+
+<section id="upload">
+	<h1>Upload Dispatch Files</h1>
+	<div id="step1" class="step">
+		<p>Choose an excel file you'd like to import data from.</p>
+		<p class="asterisk">*Make sure each sheet has a corresponding subhaul sheet, formatted like the following: "Mar 26", "Subhaul Mar 26" or "September 5", "Subhaul September 5"</p>
+		<form id="excel_form" enctype="multipart/form-data">
+			<label for="excel_file" class="file-select">
+				<span id="file-icon">
+					<i class="fas fa-file"></i>
+				</span>
+				<span id="choose">Choose a file</span> <span id="drag">or drag it here.</span>
+			</label>
+			<input id="excel_file" type="file" name="excel_file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+		</form>
+	</div>
+
+	<div id="step2" class="step">
+		<p>Now choose the dates you'd lke to import data form. Keep in mind, if you've previosly imported data for a given date, it will be completely overwritten with what you upload from this sheet.</p>
+		<ul class="scroll-select">
+		</ul>
+	</div>
+	
+	<div id="step3" class="step">
+		<button id="submit" disabled>Upload</button>
+	</div>
+</section>
+
+<div id="loading-modal">
+	<span class="sunburst-spinner">
+		<img src="{{url_for('static', filename='img/sunburst.png')}}">
+	</span>
+	<p class="loading">Loading...</p>
+</div>
+
+<script type="text/javascript">
+	var xf = null
+	
+	$(document).ready(function(){
+
+		if (advanced_upload) {
+			$('#excel_form').addClass('advanced-upload');
+		}
+		if (advanced_upload) {
+			var dropped_file = null;
+
+			$('#excel_form').on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+				e.preventDefault()
+				e.stopPropagation()
+			})
+			.on('drop', function(e) {
+				populate_file(e.originalEvent.dataTransfer.files[0])
+			})
+		}
+
+		$('#step1').show()
+
+		$('ul.scroll-select').on('click', 'li', function(){
+			$(this).toggleClass('selected')
+		})
+
+		$('button#submit').on('click', function(){
+			var form_data = new FormData()
+			form_data.append('excel_file', xf)
+			var selected_sheets = []
+			$('.scroll-select > li.selected').each(function(i,el){
+				selected_sheets.push(el.innerHTML)
+			})
+			console.log(selected_sheets)
+			form_data.append('sheets', selected_sheets)
+
+			$.get('{{url_for(".check_upload_dates")}}',{'sheets':selected_sheets},function(res){
+				if (res['invalid'].length) {
+					alert(res['invalid'] + ' are invalid dates. Data from these sheets will not be imported.')
+				}
+				if (!res['overwrite'].length || confirm('Data from '+res['overwrite'].join(', ')+' already exists. It will be overwritten with the data from this sheet.')) {
+					$('#loading-modal').show()
+					ajax_fd(form_data, function(res){
+						$('#loading-modal').hide()
+						window.location.replace("{{url_for('.dashboard_index', _external=True)}}")
+					})
+				}
+			})
+		})
+			
+		
+
+		$('#excel_file').on('change', function(e) {
+			populate_file(e.target.files[0])
+		})
+	})
+
+	function populate_file(file) {
+		xf = file
+		var reader = new FileReader()
+		reader.onload = function (e) {
+			var workbook = XLSX.read(e.target.result, {type:'binary'})
+			parse_excel_sheets(workbook.SheetNames)
+			$('.file-select').addClass('populated')
+			$('.file-select > #choose').text('')
+			$('.file-select > #drag').text(file.name)
+		}
+		reader.readAsArrayBuffer(file);
+		$('button#submit').removeAttr('disabled')
+	}
+
+	function parse_excel_sheets(sheetnames) {
+		sheetnames.reverse()
+		$('ul.scroll-select').empty()
+		for (var i = 0; i < sheetnames.length; i++) {
+			sheet = sheetnames[i]
+			date = new Date(sheet)
+			if ((sheetnames.indexOf('Subhaul '+sheet) > 0 || sheetnames.indexOf('subhaul '+sheet) > 0) && Date.parse(sheet)) {
+				// date = new Date(sheet)
+				$('ul.scroll-select').append('<li>' + sheet + '</li>')
+			}
+		}
+		$('#step2').show()
+		$('#step3').show()
+	}
+
+	var advanced_upload = function() {
+		var div = document.createElement('div');
+		return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+	}();
+</script>
+{% endblock %}

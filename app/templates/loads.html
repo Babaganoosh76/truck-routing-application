@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Loads</title>
+{% endblock %}
+
+{% block content %}
+<section>
+  <h1>Loads</h1>
+
+  <div id="search" class="search-options">
+    <input id="query" type="text" name="search" placeholder="Search...">
+    <button id="submit"><i class="fas fa-search"></i></button>
+    <br>
+    <p>Search by:</p>
+    <label><input type="radio" name="field" value="driver">Drivers</label>
+    <label><input type="radio" name="field" value="origin">Pick Up Location</label>
+    <label><input type="radio" name="field" value="destination">Destination</label>
+    <label><input type="radio" name="field" value="customer">Customer</label>
+    <br>
+    <a id="clear">Clear search filters</a>
+  </div>
+  
+  <table class="loads">
+    <tr>
+      <th>Driver</th>
+      <th>Date</th>
+      <th>Pick Up Location</th>
+      <th>Destination</th>
+      <th>Customer</th>
+      <!-- <th>Amount Billed</th> -->
+      <th>Misc.</th>
+      <th></th>
+    </tr>
+  </table>
+  <!-- <form action="{{url_for('.delete_all_loads')}}" method="post">
+    <button type="submit">Delete All Loads</button>
+  </form> -->
+</section>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    search()
+
+    $('#submit').on('click', function(e){
+      search($('input#search').val())
+    })
+
+    $('#clear').on('click', function(e){
+      $('#query').val('')
+      $('#search input[type="radio"]:checked').prop('checked', false);
+      search()
+    })
+
+    $('#query').on('keyup', function(e){
+      q = $('input#search').val()
+      if (e.keyCode == 13) {
+        search(q)
+      }
+    })
+  })
+
+  function search(query2=null,field2=null) {
+    // console.log(query)
+    field = $("#search input[type='radio']:checked").val()
+    query = $("#query").val()
+    console.log(query, field)
+    // return
+    $.get('{{url_for(".search_loads")}}',{'query':query,'field':field},function(res){
+      $('.loads tr:not(:first)').remove();
+      $('.loads tr:first').after(res)
+    })
+  }
+</script>
+{% endblock %}

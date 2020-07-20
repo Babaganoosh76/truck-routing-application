@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Page Not Found</title>
+{% endblock %}
+
+{% block content %}
+<section>
+	<h3>Sorry, that page doesn't exist</h3>
+	<p>Whatever you're looking for doesn't seem to be here. Try going back to the <a href="{{url_for('dashboard.dashboard_index')}}">homepage</a>.</p>
+</section>
+{% endblock %}

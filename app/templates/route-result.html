@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Results</title>
+{% endblock %}
+
+{% block content %}
+<section id="results">
+	<h1>Calculated Results</h1>
+	{#% for i,r in routes.items() %#}
+	{% for r in routes %}
+	<h3>Route for vehicle {{ loop.index }}:</h3>
+	<p>Elasped time: {{ r.calc_time() }} | Total distance: {{ r.calc_distance(distances) }}</p>
+	<ul class="route_result">
+		{% for j in range(r|length) %}
+
+		{#% set cs = r.stops[j] %#}
+		{#% set ps = r.stops[j-1] %#}
+
+		{% set cs = r[j] %}
+		{% set ps = r[j-1] %}
+
+		{% if loop.first %}
+			{{ route_item(cs, 'Depart from', 'home') }}
+
+		{% elif loop.last %}
+			{{ route_item(cs, 'Return to', 'home', ps) }}
+
+		{% elif (loop.index0%2 != 0) %}
+			{{ route_item(cs, 'Pick up at', 'truck-loading', ps) }}
+
+		{% elif (loop.index0%2 == 0) %}
+			{{ route_item(cs, 'Deliver to', 'road', ps) }}
+		{% endif %}
+
+		{% endfor %}
+	</ul>
+	{% endfor %}
+
+	<!-- <h3>Route for vehicle 1</h3>
+	{% set icon = 'home' %}
+	<ul class="route_result">
+		<li>
+			<span class="stop_icon"><i class="fas fa-{{ icon }}"></i></span></span>
+			Location
+			<span class="stop_time">(Time)</span>
+		</li>
+		<li>Location - Time</li>
+		<li>Location - Time</li>
+	</ul> -->
+
+	{% if dropped %}
+	<h3>Dropped Nodes:</h3>
+	<ul>
+		{% for d in dropped %}
+
+		{% if (loop.index0%2 == 0) %}
+		<li>{{ locs[d][1] }}
+		{% else %}
+		-> {{ locs[d][1] }}</li>
+		{% endif %}
+		
+		{% endfor %}
+	</ul>
+	{% endif %}
+
+	{% if cpm %}
+	<h3>Cost Analysis:</h3>
+	{% set d = routes[0].calc_distance(distances) %}
+	{% set c = cpm*d.get_miles() %}
+	<p>Total Distance: {{ d }} | Cost per Mile: {{ "$%.2f"|format(cpm) }}</p>
+	<p>{{ d }} x {{ "$%.2f"|format(cpm) }} = {{ "$%.2f"|format(c) }}</p>
+	<p><b>Total cost to complete delivery: {{ "$%.2f"|format(c) }}</b></p>
+	{% endif %}
+	
+	<br>
+	<a href="{{ url_for('dashboard.route') }}">Back</a>
+	<br><br>
+</section>
+{% endblock %}
+
+{% macro route_item(curr, actn, icon, prev=None) %}
+<li>
+	<span class="stop_icon"><i class="fas fa-{{ icon }}"></i></span></span>
+	<p class="route_title">{{ actn }} {{ locs[curr[0]][1] }}</p>
+	{% if (prev != None) %}
+	<p class="route_info">
+		Distance: {{ distances[curr[0]][prev[0]] }}&nbsp&nbsp|&nbsp&nbspEst. travel time: {{ curr[1] - prev[1] }}
+	</p>
+	{% else %}
+	<p class="route_info">Starting point for the day</p>
+	{% endif %}
+	<span class="stop_time">ETA: {{ curr[1] }}</span>
+</li>
+{% endmacro %}
+

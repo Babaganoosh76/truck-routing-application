@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Login</title>
+{% endblock %}
+
+{% block content %}
+<section>
+  <h1>Log In</h1>
+  <form class="sundance-form" method="POST">
+    {{ form.hidden_tag() }}
+    <label class="control-label" for="username">Username</label>
+    {{ form.username(autocomplete="off", required=True) }}
+    <label class="control-label" for="password">Password</label>
+    {{ form.password(autocomplete="off", required=True) }}
+    <button class="btn btn-default" type="submit">Submit</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% for load in loads %}
+<tr>
+  <a href="{{url_for('.load_id', lid=load._id)}}">
+    <td>{{ load.driver }}</td>
+    <td>{{ load.date.strftime('%b %d') }}</td>
+    <td>{{ load.origin }}</td>
+    <td>{{ load.destination }}</td>
+    <td>{{ load.customer }}</td>
+    <!-- <td>{{ load.amount_billed }}</td> -->
+    {% if load.other %}
+    <td class="misc">{{ load.other|join(', ') }}</td>
+    {% else %}
+    <td class="misc">None</td>
+    {% endif %}
+    <td>
+      <a href="{{url_for('.load_id', lid=load._id)}}">details</a>
+    </td>
+  </a>
+</tr>
+{% endfor %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Results</title>
+{% endblock %}
+
+{% block content %}
+<h1>Results</h1>
+<ul>
+	{% for load in loads %}
+	<li>{{ load.driver }} from {{ load.pick_up_location }} to {{ load.destination }} for {{ load.customer }} for ${{ load.amount_billed }} - {{ load.other }}</li>
+	{% else %}
+	<li>No data</li>
+	{% endfor %}
+</ul>
+{% endblock %}
