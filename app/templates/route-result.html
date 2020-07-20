@@ -37,18 +37,6 @@
 	</ul>
 	{% endfor %}
 
-	<!-- <h3>Route for vehicle 1</h3>
-	{% set icon = 'home' %}
-	<ul class="route_result">
-		<li>
-			<span class="stop_icon"><i class="fas fa-{{ icon }}"></i></span></span>
-			Location
-			<span class="stop_time">(Time)</span>
-		</li>
-		<li>Location - Time</li>
-		<li>Location - Time</li>
-	</ul> -->
-
 	{% if dropped %}
 	<h3>Dropped Nodes:</h3>
 	<ul>
@@ -74,7 +62,7 @@
 	{% endif %}
 	
 	<br>
-	<a href="{{ url_for('dashboard.route') }}">Back</a>
+	<a href="{{ url_for('route') }}">Back</a>
 	<br><br>
 </section>
 {% endblock %}

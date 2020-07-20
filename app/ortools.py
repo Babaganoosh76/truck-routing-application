@@ -7,6 +7,7 @@ MAX_TRAVEL_TIME = 60*10 #10 hours
 VEHICLE_CAPACITY = 100
 VEHICLE_LOAD_TIME = 30
 
+''' Generates data object '''
 def create_data(dm, tm, tw, v):
 	n = len(tm)
 	assert (n%2 != 0)
@@ -23,6 +24,7 @@ def create_data(dm, tm, tw, v):
 	data['vehicle_load_time'] = VEHICLE_LOAD_TIME
 	return data
 
+''' Generates test data object '''
 def test_data():
 	data = {}
 	# data['distance_matrix'] = [
@@ -79,15 +81,15 @@ def test_data():
 	data['depot'] = 0
 	return data
 
-
+''' Generates optimized route based on data '''
 def or_route(data):
 	assert data['num_vehicles'] <= len(data['capacities'])
 	assert len(data['time_matrix']) <= len(data['time_windows'])
 
-	# Create the routing index manager.
+	# Create the routing index manager
 	manager = pywrapcp.RoutingIndexManager(len(data['time_matrix']), data['num_vehicles'], data['depot'])
 
-	# Create Routing Model.
+	# Create Routing Model
 	routing = pywrapcp.RoutingModel(manager)
 
 	def distance_callback(from_index, to_index):
@@ -118,21 +120,17 @@ def or_route(data):
 	time_dimension = routing.GetDimensionOrDie('Time')
 
 	# Set Arc Cost Evaluator
-	# routing.SetArcCostEvaluatorOfAllVehicles(distance_callback_index)
 	routing.SetArcCostEvaluatorOfAllVehicles(time_callback_index)
 	
-	# Add time window constraints for each location except depot.
+	# Add time window constraints for each location except depot
 	for i, window in enumerate(data['time_windows']):
 		if i == 0:
 			continue
 		index = manager.NodeToIndex(i)
-		# print(window[0].get_mins(), window[1].get_mins())
-		# time_dimension.CumulVar(index).SetRange(window[0], window[1])
 		time_dimension.CumulVar(index).SetRange(int(window[0]), int(window[1]))
 
 	for v in range(data['num_vehicles']):
 		index = routing.Start(v)
-		# time_dimension.CumulVar(index).SetRange(data['time_windows'][0][0], data['time_windows'][0][1])
 		time_dimension.CumulVar(index).SetRange(int(data['time_windows'][0][0]), int(data['time_windows'][0][1]))
 
 	for v in range(data['num_vehicles']):
@@ -146,9 +144,7 @@ def or_route(data):
 		di = manager.NodeToIndex(pair[1])
 		routing.AddPickupAndDelivery(pi, di)
 		routing.solver().Add(routing.VehicleVar(pi) == routing.VehicleVar(di))
-		# routing.solver().Add(distance_dimension.CumulVar(pi) <= distance_dimension.CumulVar(di))
 		routing.solver().Add(time_dimension.CumulVar(pi) <= time_dimension.CumulVar(di))
-		# routing.solver().Add(time_dimension.CumulVar(pi) + VEHICLE_LOAD_TIME == time_dimension.CumulVar(di))
 
 	# Add capacity constraint
 	demand_callback_index = routing.RegisterUnaryTransitCallback(demand_callback)
@@ -179,8 +175,8 @@ def or_route(data):
 		print('No solution', line)
 		return None
 
+''' Prints distance-constrained solution to console '''
 def or_print_distance_solution(data, manager, routing, solution):
-	"""Prints solution on console."""
 	max_route_distance = 0
 	for vehicle_id in range(data['num_vehicles']):
 		index = routing.Start(vehicle_id)
@@ -199,6 +195,7 @@ def or_print_distance_solution(data, manager, routing, solution):
 
 	print('Maximum of the route distances: {}m'.format(max_route_distance))
 
+''' Returns array for distance-constrained solution '''
 def or_array_distance_solution(data, manager, routing, solution):
 	routes = {}
 	for vehicle_id in range(data['num_vehicles']):
@@ -217,6 +214,7 @@ def or_array_distance_solution(data, manager, routing, solution):
 		routes[vehicle_id]['distance'] = route_distance
 	return routes
 
+''' Prints time-constrained solution to console '''
 def or_print_time_solution(data, manager, routing, solution):
   time_dimension = routing.GetDimensionOrDie('Time')
   total_time = 0
@@ -234,6 +232,7 @@ def or_print_time_solution(data, manager, routing, solution):
     total_time += solution.Min(time_var)
   print('Total time of all routes: {}min'.format(total_time))
 
+''' Returns array for time-constrained solution '''
 def or_array_time_solution(data, manager, routing, solution):
 	time_dimension = routing.GetDimensionOrDie('Time')
 	total_time = 0
@@ -243,7 +242,6 @@ def or_array_time_solution(data, manager, routing, solution):
 		routes[vid] = {}
 		routes[vid]['stops'] = []
 		index = routing.Start(vid)
-		# plan_output = 'Route for vehicle {}:\n'.format(vid)
 
 		while not routing.IsEnd(index):
 			time_var = time_dimension.CumulVar(index)
@@ -251,7 +249,6 @@ def or_array_time_solution(data, manager, routing, solution):
 			min_time = STTime(solution.Min(time_var))
 			max_time = STTime(solution.Max(time_var))
 			routes[vid]['stops'].append((location_index,min_time,max_time))
-			# plan_output += '{0} Time({1},{2}) -> '.format(manager.IndexToNode(index),solution.Min(time_var),solution.Max(time_var))
 			index = solution.Value(routing.NextVar(index))
 
 		time_var = time_dimension.CumulVar(index)
@@ -260,14 +257,12 @@ def or_array_time_solution(data, manager, routing, solution):
 		max_time = STTime(solution.Max(time_var))
 		routes[vid]['stops'].append((location_index,min_time,max_time))
 
-		# plan_output += '{0} Time({1},{2})\n'.format(manager.IndexToNode(index),solution.Min(time_var),solution.Max(time_var))
-		# plan_output += 'Time of the route: {}min\n'.format(solution.Min(time_var))
-		# print(plan_output)
 		total_time += solution.Min(time_var)
-	# print('Total time of all routes: {}min'.format(total_time))
+
 	routes[vid]['total_time'] = total_time
 	return routes
 
+''' Returns STRounte object for time-constrained solution '''
 def or_stroute_time_solution(data, manager, routing, solution):
 	time_dimension = routing.GetDimensionOrDie('Time')
 	routes = []
@@ -295,6 +290,7 @@ def or_stroute_time_solution(data, manager, routing, solution):
 
 	return routes
 
+''' Prints dropped nodes to console '''
 def or_print_dropped_nodes(data, manager, routing, solution):
 	dropped_nodes = 'Dropped nodes:'
 	for node in range(routing.Size()):
@@ -304,6 +300,7 @@ def or_print_dropped_nodes(data, manager, routing, solution):
 			dropped_nodes += ' ({})'.format(manager.IndexToNode(node))
 	print(dropped_nodes)
 
+''' Returns array of dropped nodes '''
 def or_array_dropped_nodes(data, manager, routing, solution):
 	dropped_nodes = []
 	for node in range(routing.Size()):
@@ -312,12 +309,4 @@ def or_array_dropped_nodes(data, manager, routing, solution):
 		if solution.Value(routing.NextVar(node)) == node:
 			dropped_nodes.append(manager.IndexToNode(node))
 	return dropped_nodes
-
-	# assert len(dropped_nodes)%2 == 0
-	# dropped_pairs = []
-	# for i in range(len(dropped_nodes)):
-	# 	if (i%2 == 0):
-	# 		continue
-	# 	dropped_pairs.append((dropped_nodes[i-1],dropped_nodes[i]))
-	# return dropped_pairs
 

@@ -1,17 +1,9 @@
-# Sundance Dashboard
+# Truck Routing Application
 
-**Routing Components**
+This application provides dispatchers with a tool to route a fleet of trucks efficiently. This application seeks to provide a simple, powerful tool that can help dispatchers perform their jobs more efficiently and contribute to the reduction of fuel consumption, carbon emissions, and vehicle maintenance costs.
 
-* OR-Tools: https://developers.google.com/optimization/routing/vrp
+**Routing Dependencies**
 
-* 
+* OR-Tools
 
-**Dependencies:**
-
-* flask/jinja2 - web app/ui
-
-* openpyxl - for creating Excel sheets
-
-* pdfkit - for exporting data to pdf
-
-* pandas? - for data analysis
+* Google Maps API

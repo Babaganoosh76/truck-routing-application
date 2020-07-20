@@ -15,7 +15,7 @@
 		<label>Destination</label>
 		<input id="destination" type="text" name="destination" placeholder="">
 	</form> -->
-	<form method="post" action="{{ url_for('dashboard.route_result') }}">
+	<form method="post" action="{{ url_for('route_result') }}">
 		<div class="row">
 			<label class="aln-right">No. Drivers:</label>
 			<input name="vehicles" type="text">
@@ -95,7 +95,6 @@
 		})
 
 		// Place the input field onto the map
-		// map.controls[google.maps.ControlPosition.TOP_RIGHT].push(origin);
 		origin_search.addListener('places_changed', function() {
 			origin_place = origin_search.getPlaces()[0]
 			if (destination_search.getPlaces()) {
@@ -119,58 +118,57 @@
 			destination: {
 				'placeId': did
 			},
-      travelMode: 'DRIVING'
-    };
-    directions_service.route(request, function(res, status) {
-    	if (status == 'OK') {
-    		directions_renderer.setDirections(res);
-    		// show_results(res.routes[0].legs[0].distance.value)
-    	} else {
-    		console.log('Error retrieving route: ' + status)
-    	}
-    });
-  }
+			travelMode: 'DRIVING'
+		};
+		directions_service.route(request, function(res, status) {
+			if (status == 'OK') {
+				directions_renderer.setDirections(res);
+			} else {
+				console.log('Error retrieving route: ' + status)
+			}
+		});
+	}
 
-  function view_route(b) {
-  	bi = $(b).closest('.row').index() - 2
-  	console.log('route row ' + bi)
-  	console.log(b)
-  	var request = {
-  		origin: {
-  			'placeId': searchboxes[2*bi].getPlaces()[0].place_id
-  		},
-  		destination: {
-  			'placeId': searchboxes[2*bi+1].getPlaces()[0].place_id
-  		},
-  		travelMode: 'DRIVING'
-  	};
-  	directions_service.route(request, function(res, status) {
-  		if (status == 'OK') {
-  			directions_renderer.setDirections(res)
-    	} else {
-    		console.log('Error retrieving route: ' + status)
-    	}
-    })
-  }
+	function view_route(b) {
+		bi = $(b).closest('.row').index() - 2
+		console.log('route row ' + bi)
+		console.log(b)
+		var request = {
+			origin: {
+				'placeId': searchboxes[2*bi].getPlaces()[0].place_id
+			},
+			destination: {
+				'placeId': searchboxes[2*bi+1].getPlaces()[0].place_id
+			},
+			travelMode: 'DRIVING'
+		};
+		directions_service.route(request, function(res, status) {
+			if (status == 'OK') {
+				directions_renderer.setDirections(res)
+			} else {
+				console.log('Error retrieving route: ' + status)
+			}
+		})
+	}
 
-  function show_results(meters, tolls=null) {
-  	var miles = 0.00062137*meters
-  	var rate = 2.50
-  	$r = $('#results')
-  	$r.empty()
-  	$r.append('<tr><td><p>'+miles.toFixed()+' mi</p><p class="small">at '+rate.toFixed(2)+'/mi</p></td><td>'+(miles*rate).toFixed(2)+'</td></tr>')
-  	$r.append('<tr><td><p>'+(tolls?tolls.length:0)+' tolls</p><p class="small">No data</p></td><td>0.00</td></tr>')
-  	$r.append('<tr><td>Suggested cost:</td><td id="total">'+(miles*rate).toFixed(2)+'</td></tr>')
-  	$r.show()
-  	$('#results-h2').show()
+	function show_results(meters, tolls=null) {
+		var miles = 0.00062137*meters
+		var rate = 2.50
+		$r = $('#results')
+		$r.empty()
+		$r.append('<tr><td><p>'+miles.toFixed()+' mi</p><p class="small">at '+rate.toFixed(2)+'/mi</p></td><td>'+(miles*rate).toFixed(2)+'</td></tr>')
+		$r.append('<tr><td><p>'+(tolls?tolls.length:0)+' tolls</p><p class="small">No data</p></td><td>0.00</td></tr>')
+		$r.append('<tr><td>Suggested cost:</td><td id="total">'+(miles*rate).toFixed(2)+'</td></tr>')
+		$r.show()
+		$('#results-h2').show()
 
-  	$('html, body').animate({
-  		scrollTop: $('#results').offset().top
-  	}, 1000)
-  }
+		$('html, body').animate({
+			scrollTop: $('#results').offset().top
+		}, 1000)
+	}
 
-  function round_price(p) {
-  	return Math.ceil(p/25)*25
-  }
+	function round_price(p) {
+		return Math.ceil(p/25)*25
+	}
 </script>
 {% endblock %}
