@@ -13,4 +13,4 @@ if os.getenv('FLASK_ENV') != 'development':
 logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0, '/var/www/truck_routing_application/')
 
-from personal_website import app as application
+from app import app as application
